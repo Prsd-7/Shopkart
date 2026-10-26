@@ -1,6 +1,7 @@
 import React from "react";
 import Navbar from "../components/Navbar";
 import "./Home.css";
+import { Link } from "react-router-dom";
 
 function Home() {
   const products = [
@@ -103,9 +104,9 @@ function Home() {
           </p>
 
           <div className="hero-buttons">
-            <button className="shop-btn">Shop Now →</button>
+<Link to="/products" className="shop-btn">Shop Now →</Link>
 
-            <button className="deal-btn">Explore Deals</button>
+            <Link to="/deals" className="deal-btn">Explore Deals</Link>
           </div>
           {/* Hero Benefits */}
           <div className="hero-benefits">
