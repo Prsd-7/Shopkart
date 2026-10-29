@@ -17,7 +17,7 @@ const productsData = [
   },
 ];
 
-function Products() {
+function Products({dispatch}) {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [maxPrice, setMaxPrice] = useState(20000);
   const [selectedRating, setSelectedRating] = useState(0);
@@ -68,7 +68,7 @@ function Products() {
 
   return (
     <>
-      <Navbar />
+      
 
       <main className="products-page">
         <section className="products-banner">
@@ -195,9 +195,14 @@ function Products() {
                           <del>₹{product.originalPrice}</del>
                         )}
                       </div>
-                      <button type="button" className="add-cart-button">
-                        🛒 Add to Cart
-                      </button>
+                      <button
+  className="add-cart-button"
+  onClick={() => {
+    dispatch({ type: "ADD_ITEM", payload: product });
+  }}
+>
+  🛒 Add to Cart
+</button>
                     </div>
                   </div>
                 ))

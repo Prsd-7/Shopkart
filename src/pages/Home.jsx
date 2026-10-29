@@ -1,5 +1,5 @@
 import React from "react";
-import Navbar from "../components/Navbar";
+
 import "./Home.css";
 import { Link } from "react-router-dom";
 
@@ -88,7 +88,7 @@ function Home() {
 
   return (
     <>
-      <Navbar />
+      
 
       {/* Hero Section */}
       <section className="hero-section">
