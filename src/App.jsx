@@ -4,7 +4,7 @@ import Products from "./pages/Products";
 import "./App.css";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import React, { useState } from "react";
+
 import Navbar from "./components/Navbar";
 import Cart from "./pages/Cart";
 import React, { useState, useEffect, useReducer } from "react";
