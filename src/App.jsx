@@ -4,7 +4,6 @@ import Products from "./pages/Products";
 import "./App.css";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-
 import Navbar from "./components/Navbar";
 import Cart from "./pages/Cart";
 import React, { useState, useEffect, useReducer } from "react";
@@ -22,48 +21,38 @@ function cartReducer(state, action) {
         );
       }
 
-      return [
-        ...state,
-        { ...action.payload, quantity: 1 }
-      ];
+      return [...state, { ...action.payload, quantity: 1 }];
     }
 
-    // Other cases (INCREASE_QUANTITY, DECREASE_QUANTITY, etc.) will be added here next
     case "INCREASE_QUANTITY":
-  return state.map((item) =>
-    item.id === action.payload
-      ? {
-          ...item,
-          quantity: item.quantity + 1,
-        }
-      : item
-  );
+      return state.map((item) =>
+        item.id === action.payload
+          ? {
+              ...item,
+              quantity: item.quantity + 1,
+            }
+          : item
+      );
 
     case "DECREASE_QUANTITY":
       return state
         .map((item) =>
           item.id === action.payload
             ? {
-                ...item, quantity: item.quantity - 1
+                ...item,
+                quantity: item.quantity - 1,
               }
             : item
         )
-        .filter(
-          (item) => item.quantity > 0
-        );
+        .filter((item) => item.quantity > 0);
 
-         case "REMOVE_ITEM":
+    case "REMOVE_ITEM":
+      return state.filter((item) => item.id !== action.payload);
 
-      return state.filter(
-        (item) => item.id !== action.payload
-      );
-
-      case "CLEAR_CART":
-
+    case "CLEAR_CART":
       return [];
 
-      
-case "LOAD_CART":
+    case "LOAD_CART":
       return action.payload;
 
     default:
@@ -72,53 +61,48 @@ case "LOAD_CART":
 }
 
 function App() {
-
+  // 1. Declare all state and reducers first
   const [userName, setUserName] = useState("");
   const [cartLoaded, setCartLoaded] = useState(false);
-useEffect(() => {
-  const savedCart = localStorage.getItem("cart");
-  if (savedCart) {
-    dispatch({
-      type: "LOAD_CART",
-      payload: JSON.parse(savedCart),
-    });
-  }
-  setCartLoaded(true);
-}, []);
+  const [cart, dispatch] = useReducer(cartReducer, []);
 
-useEffect(() => {
-  if (!cartLoaded) {
-    return;
-  }
+  // 2. Load cart from localStorage on mount
+  useEffect(() => {
+    const savedCart = localStorage.getItem("cart");
+    if (savedCart) {
+      try {
+        dispatch({
+          type: "LOAD_CART",
+          payload: JSON.parse(savedCart),
+        });
+      } catch (error) {
+        console.error("Failed to parse cart from localStorage:", error);
+      }
+    }
+    setCartLoaded(true);
+  }, []);
 
-  localStorage.setItem("cart", JSON.stringify(cart));
-}, [cart, cartLoaded]);
+  // 3. Persist cart to localStorage only after initial load finishes
+  useEffect(() => {
+    if (!cartLoaded) {
+      return;
+    }
 
-
-  const [cart, dispatch] = useReducer(
-  cartReducer,
-  []
-);
+    localStorage.setItem("cart", JSON.stringify(cart));
+  }, [cart, cartLoaded]);
 
   return (
     <>
-    <Navbar
-  userName={userName}
-  cart={cart}
-/>
+      <Navbar userName={userName} cart={cart} />
 
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/home" element={<Home />} />
-      <Route path="/products" element={<Products dispatch={dispatch} />} />
-
-      <Route path="/login" element={<Login setUserName={setUserName} />}/>
-<Route path="/register" element={<Register setUserName={setUserName} />} />
-<Route
-  path="/cart"
-  element={<Cart cart={cart} dispatch={dispatch} />}
-/>
-    </Routes>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/products" element={<Products dispatch={dispatch} />} />
+        <Route path="/login" element={<Login setUserName={setUserName} />} />
+        <Route path="/register" element={<Register setUserName={setUserName} />} />
+        <Route path="/cart" element={<Cart cart={cart} dispatch={dispatch} />} />
+      </Routes>
     </>
   );
 }
