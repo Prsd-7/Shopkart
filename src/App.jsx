@@ -7,6 +7,7 @@ import Register from "./pages/Register";
 import Navbar from "./components/Navbar";
 import Cart from "./pages/Cart";
 import React, { useState, useEffect, useReducer } from "react";
+import Footer from "./components/Footer";
 
 function cartReducer(state, action) {
   switch (action.type) {
@@ -102,7 +103,11 @@ function App() {
         <Route path="/login" element={<Login setUserName={setUserName} />} />
         <Route path="/register" element={<Register setUserName={setUserName} />} />
         <Route path="/cart" element={<Cart cart={cart} dispatch={dispatch} />} />
+        <Route path="/about" element={<About />}/>
+        <Route path="/contact" element={<Contact />}/>
       </Routes>
+
+      <Footer />
     </>
   );
 }
