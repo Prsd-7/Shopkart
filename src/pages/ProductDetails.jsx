@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import productDetails from "../data/productDetails";
-import "./ProductDetails.css";
+import "./Product-Details.css";
 
 function ProductDetails({ dispatch }) {
   const { id } = useParams();
