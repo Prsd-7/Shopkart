@@ -1,222 +1,153 @@
+// src/pages/Products.jsx
+
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import "./Products.css";
 
-const productsData = [
-  {
-    id: 1,
-    name: "Samsung Galaxy M14 5G",
-    category: "Electronics",
-    price: "12,499",
-    originalPrice: "14,999",
-    rating: 4.4,
-    reviews: 1850,
-    discount: "17%",
-    isAvailable: true,
-    image: "/images/products/Samsung_phone.png",
-  },
-];
+function Products({ dispatch }) {
+  const navigate = useNavigate();
 
-function Products({dispatch}) {
-  const [selectedCategories, setSelectedCategories] = useState([]);
-  const [maxPrice, setMaxPrice] = useState(20000);
-  const [selectedRating, setSelectedRating] = useState(0);
-  const [availability, setAvailability] = useState("");
+  // State management
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortBy, setSortBy] = useState("default");
+  const [addedProductId, setAddedProductId] = useState(null);
 
-  const handleCategoryChange = (category) => {
-    if (selectedCategories.includes(category)) {
-      setSelectedCategories(
-        selectedCategories.filter((item) => item !== category)
-      );
-    } else {
-      setSelectedCategories([...selectedCategories, category]);
-    }
-  };
-
-  const handleRatingChange = (rating) => {
-    setSelectedRating(selectedRating === rating ? 0 : rating);
-  };
-
-  const handleAvailabilityChange = (value) => {
-    setAvailability(availability === value ? "" : value);
-  };
-
-  const clearFilters = () => {
-    setSelectedCategories([]);
-    setMaxPrice(20000);
-    setSelectedRating(0);
-    setAvailability("");
-  };
-
-  const filteredProducts = productsData.filter((product) => {
-    const categoryMatch =
-      selectedCategories.length === 0 ||
-      selectedCategories.includes(product.category);
-
-    const priceMatch =
-      Number(product.price.toString().replace(/,/g, "")) <= maxPrice;
-
-    const ratingMatch = product.rating >= selectedRating;
-
-    const availabilityMatch =
-      availability === "" ||
-      (availability === "inStock" && product.isAvailable) ||
-      (availability === "outOfStock" && !product.isAvailable);
-
-    return categoryMatch && priceMatch && ratingMatch && availabilityMatch;
-  });
+  // Filter and sort logic
+  const filteredProducts = products
+    .filter((product) => {
+      const matchesCategory =
+        selectedCategory === "All" || product.category === selectedCategory;
+      const matchesSearch = product.name
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
+      return matchesCategory && matchesSearch;
+    })
+    .sort((a, b) => {
+      if (sortBy === "price-low") return a.price - b.price;
+      if (sortBy === "price-high") return b.price - a.price;
+      if (sortBy === "rating") return b.rating - a.rating;
+      return 0;
+    });
 
   return (
-    <>
-      
+    <div className="products-page">
+      <Navbar />
 
-      <main className="products-page">
-        <section className="products-banner">
-          <div className="banner-content">
-            <h1>
-              All <span>Products</span>
-            </h1>
-            <p>Explore our wide range of top quality products</p>
-          </div>
+      <main className="products-container">
+        {/* Filters and Search Bar Section */}
+        <section className="filter-controls">
+          <input
+            type="text"
+            placeholder="Search products..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="search-input"
+          />
+
+          <select
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            className="category-select"
+          >
+            <option value="All">All Categories</option>
+            <option value="Electronics">Electronics</option>
+            <option value="Fashion">Fashion</option>
+            <option value="Home & Kitchen">Home & Kitchen</option>
+          </select>
+
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+            className="sort-select"
+          >
+            <option value="default">Sort by: Default</option>
+            <option value="price-low">Price: Low to High</option>
+            <option value="price-high">Price: High to Low</option>
+            <option value="rating">Customer Rating</option>
+          </select>
         </section>
 
-        <section className="products-content">
-          <aside className="filter-sidebar">
-            <div className="filter-title">
-              <h3>FILTERS</h3>
-              <button type="button" onClick={clearFilters}>
-                Clear All
-              </button>
-            </div>
+        {/* Products Grid */}
+        <div className="products-grid">
+          {filteredProducts.length > 0 ? (
+            filteredProducts.map((product) => (
+              <div
+                className="product-card"
+                key={product.id}
+                title="Click for more info"
+              >
+                {/* Product Image Area */}
+                <div
+                  className="product-image"
+                  onClick={() => navigate(`/products/${product.id}`)}
+                >
+                  {product.discount && (
+                    <span className="discount-badge">-{product.discount}</span>
+                  )}
 
-            <div className="filter-group">
-              <h4>Categories</h4>
-              {[
-                "Electronics",
-                "Fashion",
-                "Home & Kitchen",
-                "Beauty",
-                "Sports",
-                "Books",
-              ].map((category) => (
-                <label key={category}>
-                  <input
-                    type="checkbox"
-                    checked={selectedCategories.includes(category)}
-                    onChange={() => handleCategoryChange(category)}
-                  />
-                  {category}
-                </label>
-              ))}
-            </div>
+                  <button
+                    className="wishlist-button"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    ♡
+                  </button>
 
-            <div className="filter-group">
-              <h4>Price Range</h4>
-              <input
-                type="range"
-                min="199"
-                max="20000"
-                value={maxPrice}
-                onChange={(e) => setMaxPrice(Number(e.target.value))}
-              />
-              <div className="price-range">
-                <span>₹199</span>
-                <span>₹{maxPrice}</span>
-              </div>
-            </div>
-
-            <div className="filter-group">
-              <h4>Ratings</h4>
-              {[5, 4, 3].map((rating) => (
-                <label key={rating}>
-                  <input
-                    type="checkbox"
-                    checked={selectedRating === rating}
-                    onChange={() => handleRatingChange(rating)}
-                  />
-                  {"⭐".repeat(rating)} & above
-                </label>
-              ))}
-            </div>
-
-            <div className="filter-group">
-              <h4>Availability</h4>
-              <label>
-                <input
-                  type="checkbox"
-                  checked={availability === "inStock"}
-                  onChange={() => handleAvailabilityChange("inStock")}
-                />
-                In Stock
-              </label>
-              <label>
-                <input
-                  type="checkbox"
-                  checked={availability === "outOfStock"}
-                  onChange={() => handleAvailabilityChange("outOfStock")}
-                />
-                Out of Stock
-              </label>
-            </div>
-          </aside>
-
-          <div className="products-area">
-            <div className="products-header">
-              <p>
-                Showing {filteredProducts.length} of {productsData.length} products
-              </p>
-            </div>
-
-            <div className="products-grid">
-              {filteredProducts.length > 0 ? (
-                filteredProducts.map((product) => (
-                  <div className="product-card" key={product.id}>
-                    <div className="product-image">
-                      {product.discount && (
-                        <span className="discount-badge">
-                          -{product.discount}
-                        </span>
-                      )}
-                      <button type="button" className="wishlist-button">
-                        ♡
-                      </button>
-                      <img src={product.image} alt={product.name} />
-                    </div>
-                    <div className="product-info">
-                      <small>{product.category}</small>
-                      <h3>{product.name}</h3>
-                      <div className="rating">
-                        ⭐ {product.rating}
-                        <span> ({product.reviews})</span>
-                      </div>
-                      <div className="product-price">
-                        ₹{product.price}
-                        {product.originalPrice && (
-                          <del>₹{product.originalPrice}</del>
-                        )}
-                      </div>
-                      <button
-  className="add-cart-button"
-  onClick={() => {
-    dispatch({ type: "ADD_ITEM", payload: product });
-  }}
->
-  🛒 Add to Cart
-</button>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <div className="no-products">
-                  <h3>No Products Found !</h3>
-                  <p>Try changing your filters.</p>
+                  <img src={product.image} alt={product.name} />
                 </div>
-              )}
+
+                {/* Product Information Area */}
+                <div
+                  className="product-info"
+                  onClick={() => navigate(`/products/${product.id}`)}
+                >
+                  <small>{product.category}</small>
+                  <h3>{product.name}</h3>
+
+                  <div className="rating">
+                    ⭐ {product.rating} <span>({product.reviews})</span>
+                  </div>
+
+                  <div className="product-price">
+                    ₹{product.price} <del>₹{product.originalPrice}</del>
+                  </div>
+
+                  <button
+                    className="add-cart-button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+
+                      dispatch({
+                        type: "ADD_ITEM",
+                        payload: product,
+                      });
+
+                      setAddedProductId(product.id);
+
+                      setTimeout(() => {
+                        setAddedProductId(null);
+                      }, 2000);
+                    }}
+                  >
+                    {addedProductId === product.id ? (
+                      <>✓ Added to Cart</>
+                    ) : (
+                      <>🛒 Add to Cart</>
+                    )}
+                  </button>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="no-products">
+              <h3>No Products Found!</h3>
+              <p>Try changing your filters.</p>
             </div>
-          </div>
-        </section>
+          )}
+        </div>
       </main>
-    </>
+    </div>
   );
 }
 
