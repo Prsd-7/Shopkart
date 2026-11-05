@@ -1,0 +1,169 @@
+
+
+/* =================================
+   SORT DROPDOWN
+================================= */
+
+
+.sort-section {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+
+.sort-section label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #344054;
+  white-space: nowrap;
+}
+
+
+.sort-section select {
+  width: 200px;
+  height: 40px;
+
+
+  padding: 0 40px 0 14px;
+
+
+  border: 1px solid #cfd5da;
+  border-radius: 8px;
+
+
+  background-color: #ffffff;
+  background-image: url("/icons/drop-down.png");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+
+
+  color: #344054;
+
+
+  font-size: 14px;
+  font-weight: 500;
+
+
+  cursor: pointer;
+  outline: none;
+
+
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+
+.sort-section select:hover {
+  border-color: #00a99d;
+}
+
+
+.sort-section select:focus {
+  border-color: #00b7aa;
+  box-shadow: 0 0 0 2px rgba(0, 183, 170, 0.12);
+}
+
+
+.sort-section select option {
+  background: #ffffff;
+  color: #344054;
+  font-size: 14px;
+}
+
+
+
+
+/* =================================
+   TABLET
+================================= */
+
+
+@media (max-width: 1024px) {
+  .sort-section {
+    gap: 7px;
+  }
+
+
+  .sort-section label {
+    font-size: 13px;
+  }
+
+
+  .sort-section select {
+    width: 200px;
+    height: 38px;
+    font-size: 13px;
+    background-size: 15px;
+  }
+}
+
+
+
+
+/* =================================
+   MOBILE
+================================= */
+
+
+@media (max-width: 768px) {
+  .sort-section {
+    gap: 6px;
+  }
+
+
+  .sort-section label {
+    font-size: 12px;
+  }
+
+
+  .sort-section select {
+    width: 180px;
+    height: 36px;
+    padding-left: 11px;
+    padding-right: 36px;
+    font-size: 12px;
+
+
+    background-position: right 10px center;
+    background-size: 14px;
+  }
+}
+
+
+
+
+/* =================================
+   SMALL MOBILE
+================================= */
+
+
+@media (max-width: 480px) {
+  .sort-section {
+    gap: 5px;
+  }
+
+
+  .sort-section label {
+    font-size: 11px;
+  }
+
+
+  .sort-section select {
+    width: 160px;
+    height: 34px;
+    padding-left: 10px;
+    padding-right: 32px;
+    font-size: 11px;
+
+
+    background-position: right 9px center;
+    background-size: 13px;
+  }
+}
+
