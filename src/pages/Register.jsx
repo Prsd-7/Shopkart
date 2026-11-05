@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useState, useContext } from "react";
 import { useForm } from "react-hook-form";
-import "./Register.css";
 import { useNavigate } from "react-router-dom";
+import { ShopKartContext } from "../context/ShopKartContext";
+import "./Register.css";
 
-
-function Register({ setUserName }) {
+function Register() {
+  const navigate = useNavigate();
+  const { setUserName } = useContext(ShopKartContext);
+  
   const {
     register,
     handleSubmit,
@@ -19,8 +22,6 @@ function Register({ setUserName }) {
       alert("Passwords do not match");
     }
   };
-
-  const navigate = useNavigate();
 
   return (
     <div className="register-page">

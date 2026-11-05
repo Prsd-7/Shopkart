@@ -1,9 +1,11 @@
 import './Cart.css';
 import { Link } from 'react-router-dom';
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { ShopKartContext } from "../context/ShopKartContext";
 
-function Cart({ cart = [], dispatch }) {
+function Cart() {
   const [orderPlaced, setOrderPlaced] = useState(false);
+  const { cart, dispatch } = useContext(ShopKartContext);
 
   // 1. Calculate Subtotal
   const subtotal = cart.reduce(
@@ -73,9 +75,9 @@ function Cart({ cart = [], dispatch }) {
 
                       <td>
                         <div className="cart-price">
-                          <strong>₹{item.price.toLocaleString("en-IN")}</strong>
+                          <strong>₹{Number(String(item.price).replace(/,/g, "")).toLocaleString("en-IN")}</strong>
                           <span className="original-price">
-                            ₹{item.originalPrice.toLocaleString("en-IN")}
+                            ₹{Number(String(item.originalPrice).replace(/,/g, "")).toLocaleString("en-IN")}
                           </span>
                         </div>
                       </td>
@@ -110,7 +112,8 @@ function Cart({ cart = [], dispatch }) {
 
                       <td>
                         <strong className="item-total">
-                          ₹{(item.price * item.quantity).toLocaleString("en-IN")}
+                          {/* FIXED NaN ISSUE HERE */}
+                          ₹{(Number(String(item.price).replace(/,/g, "")) * item.quantity).toLocaleString("en-IN")}
                         </strong>
                       </td>
 

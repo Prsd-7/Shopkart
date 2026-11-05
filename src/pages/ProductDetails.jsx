@@ -2,16 +2,23 @@
 
 import React, { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import productDetails from "../data/productDetails";
-import "./Product-Details.css";
 
-function ProductDetails({ dispatch }) {
+import "./Product-Details.css";
+import { useContext } from "react";
+import { ShopKartContext } from "../context/ShopKartContext";
+
+
+function ProductDetails() {
   const { id } = useParams();
-  const navigate = useNavigate();
+  const navigate = useNavigate(); 
   const [quantity, setQuantity] = useState(1);
 
+  const { dispatch, productDetails } = useContext(ShopKartContext);
+  // ...
+
   // Find product by id from URL params
-  const product = productDetails.find((item) => item.id === Number(id));
+  
+const product = productDetails.find((item) => Number(item.id) === Number(id));
 
   // Helper function to format specification keys (e.g. wheelType -> Wheel Type)
   const formatKey = (key) => {

@@ -33,24 +33,24 @@
 /* =========================
    NAVBAR
    ========================= */
-
-
 .navbar {
   min-height: 72px;
   background-color: white;
-  /* border-bottom: 1px solid #eeeeee; */
+  border-bottom: 1px solid #eeeeee; /* Optional: uncomment this to give the navbar a clean separation line */
   padding: 10px 0;
+  width: 100%;
+  position: relative;
+  z-index: 1000; /* Ensures dropdown menus always sit on top of page content */
 }
-
 
 .navbar .container-fluid {
   padding-left: 32px;
   padding-right: 32px;
   display: flex;
   align-items: center;
+  justify-content: space-between; /* Distributes space evenly between logo, nav, search, and actions */
+  width: 100%;
 }
-
-
 
 
 /* =========================

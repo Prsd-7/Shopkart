@@ -1,5 +1,6 @@
 import React from "react";
-
+import { useContext } from "react";
+import { ShopKartContext } from "../context/ShopKartContext";
 import "./Home.css";
 import { Link } from "react-router-dom";
 
@@ -86,6 +87,9 @@ function Home() {
     },
   ];
 
+  const { userName } = useContext(ShopKartContext);
+  
+
   return (
     <>
       
@@ -106,7 +110,7 @@ function Home() {
           <div className="hero-buttons">
 <Link to="/products" className="shop-btn">Shop Now →</Link>
 
-            <Link to="/deals" className="deal-btn">Explore Deals</Link>
+            <Link to="/products" className="deal-btn">Explore Deals</Link>
           </div>
           {/* Hero Benefits */}
           <div className="hero-benefits">

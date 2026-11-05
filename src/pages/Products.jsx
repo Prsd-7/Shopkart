@@ -1,14 +1,19 @@
 // src/pages/Products.jsx
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import { ShopKartContext } from "../context/ShopKartContext";
 import "./Products.css";
 import "./Sort-DropDown.css";
-import "./Pagination.css"; // Task 2, Step 8: Style the Pagination buttons
+import "./Pagination.css"; 
+import "./Loading_&_Error.css";
 
-function Products({ dispatch, products = [] }) {
+function Products() {
   const navigate = useNavigate();
+  
+  // Task 4: Pull products, dispatch, loading, and error from Global Context
+  const { products, dispatch, loading, error } = useContext(ShopKartContext);
 
   // Task 1: Sorting state
   const [sortOption, setSortOption] = useState("");
@@ -21,6 +26,37 @@ function Products({ dispatch, products = [] }) {
   // Task 2, Step 1: Create Pagination State
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 8;
+
+  // Task 4: Loading UI
+  if (loading) {
+    return (
+      <div className="products-page">
+        
+        <div className="loading-message">
+          <div className="loading-spinner"></div>
+          <h2>Loading Products</h2>
+          <p>Please wait while we fetch the latest products...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Task 4: Error UI
+  if (error) {
+    return (
+      <div className="products-page">
+        
+        <div className="error-message">
+          <div className="error-icon">!</div>
+          <h2>Oops! Something went wrong</h2>
+          <p>{error}</p>
+          <button onClick={() => window.location.reload()}>Try Again</button>
+        </div>
+      </div>
+    );
+  }
+
+  
 
   // Filter Logic
   const filteredProducts = products.filter((product) => {
@@ -79,7 +115,7 @@ function Products({ dispatch, products = [] }) {
 
   return (
     <div className="products-page">
-      <Navbar />
+      
 
       <main className="products-container">
         {/* Filters and Search Bar Section */}
@@ -221,7 +257,7 @@ function Products({ dispatch, products = [] }) {
             <button
               onClick={() => setCurrentPage((previous) => Math.min(previous + 1, totalPages))}
               disabled={currentPage === totalPages}
-            >
+            > 
               →
             </button>
           </div>

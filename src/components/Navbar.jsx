@@ -1,9 +1,12 @@
 import React from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import "./Navbar.css";
+import { useContext } from "react";
+import { ShopKartContext } from "../context/ShopKartContext";
 
-function Navbar({userName, cart =[]}) {
+function Navbar()  {
   const navigate = useNavigate();
+  const { userName, cart } = useContext(ShopKartContext);
 
   const cartCount = cart.reduce(
   (total, item) =>
@@ -122,7 +125,7 @@ function Navbar({userName, cart =[]}) {
               {userName ? (
                 <span className="user-greeting">
                   <img
-                    src="/icons/profile-icon.png"
+                    src="/icons/profile-icon-2.png"
                     alt="Profile"
                     className="greeting-profile-icon"
                   />

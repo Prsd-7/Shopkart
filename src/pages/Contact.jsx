@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-
+import "./Contact.css";
 function Contact() {
     const [formData, setFormData] = useState({
     name: "",
@@ -28,6 +28,18 @@ function Contact() {
   const handleSubmit = (e) => {
     e.preventDefault();
     setSubmitted(true);
+  };
+
+// Update your handleHelpChange function to track checked checkboxes
+  const handleHelpChange = (e) => {
+    const { value, checked } = e.target;
+    setFormData((prev) => {
+      const updatedHelp = checked
+        ? [...prev.help, value]
+        : prev.help.filter((item) => item !== value);
+      return { ...prev, help: updatedHelp };
+    });
+    setSubmitted(false);
   };
   return (
     <main className="contact-page">
